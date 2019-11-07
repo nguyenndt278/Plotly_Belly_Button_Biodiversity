@@ -4,7 +4,7 @@ function buildMetadata(sample) {
     d3.json(sampledata).then((sample) => {
       var samplemeta= d3.select("#sample-metadata");
       samplemeta.html("");
-      Object.defineProperties(sample).forEach(([key,value]) => {
+      Object.entries(sample).forEach(([key,value]) => {
         var row= samplemeta.append("p");
         row.text(`${key}: ${value}`)})
       });
@@ -16,8 +16,8 @@ function buildCharts(sample) {
       var datafigures= data.sample_values;
       var colors= data.otu_ids;
       var trace=[{
-        x: colors,
-        y: datafigures,
+        x: data.otu_ids,
+        y: data.sample_values,
         mode: 'markers',
         marker: {size: datafigures, color: colors}
       }];
@@ -26,21 +26,20 @@ function buildCharts(sample) {
         xaxis: {title: "OTU - ID"}
       };
       Plotly.newPlot('bubble', trace, layout);
-    d3.json(datafigures).then((data) => {
-      var trace1= {
-        values: data.sample_values.slice(0,10),
-        labels: data.otu_ids,
-        type: "pie",
-        hole: .5
-      };
-      var dataa=[trace1];
-      var layout= {
+
+      var top_ids = data.otu_ids.slice(0,10);
+      var top_values = data.sample_values.slice(0,10);
+      var trace1 = [{
+      labels: top_ids, 
+      values: top_values,
+      type: "pie"
+    }];
+      var layout_pie= {
         title: "Pie chart"
       };
-      Plotly.newPlot('pie', dataa, layout);
-    })
-    })
-}
+      Plotly.newPlot('pie', trace1, layout_pie);
+    });
+    }
 
 function init() {
   var selector = d3.select("#selDataset");
