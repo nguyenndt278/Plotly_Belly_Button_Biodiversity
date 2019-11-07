@@ -23,21 +23,28 @@ function buildCharts(sample) {
       }];
       var layout= {
         title: "Belly Button Bacteria Count",
-        xaxis: {title: "OTU - ID"}
+        xaxis: {title: "OTU - ID"},
+        yaxis: {title: "Sample Volume" }
       };
       Plotly.newPlot('bubble', trace, layout);
 
-      var top_ids = data.otu_ids.slice(0,10);
-      var top_values = data.sample_values.slice(0,10);
-      var trace1 = [{
-      labels: top_ids, 
-      values: top_values,
-      type: "pie"
-    }];
-      var layout_pie= {
-        title: "Pie chart"
-      };
-      Plotly.newPlot('pie', trace1, layout_pie);
+      let sample_values = data.sample_values;
+      let otu_ids = data.otu_ids;
+      let otu_labels = data.otu_labels;
+
+    // .......... Pie plot ..........//
+     let trace1 = {
+      values: sample_values.slice(0, 10),
+      labels: otu_ids.slice(0, 10),
+      type: "pie",
+      hovertext: otu_labels.slice(0, 10)
+    };
+     let layout_pie = {
+      title: "Pie Chart of ten most prevalent Belly Button OTUs"
+    };
+      let data_pie = [trace1];
+      Plotly.newPlot("pie", data_pie, layout_pie);
+
     });
     }
 
