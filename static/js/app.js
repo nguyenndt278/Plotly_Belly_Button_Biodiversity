@@ -1,12 +1,21 @@
 function buildMetadata(sample) {
-
+  
   var sampledata=`/metadata/${sample}`;
     d3.json(sampledata).then((sample) => {
       var samplemeta= d3.select("#sample-metadata");
+      var tbody= d3.select("tbody");
       samplemeta.html("");
+
+      var row=tbody.append("tr");
       Object.entries(sample).forEach(([key,value]) => {
-        var row= samplemeta.append("p");
-        row.text(`${key}: ${value}`)})
+      var cell= samplemeta.append("td");
+      cell.text(`${key}: ${value}`)})
+
+
+
+      // Object.entries(sample).forEach(([key,value]) => {
+      //   var row= samplemeta.append("p");
+      //   row.text(`${key}: ${value}`)})
       });
     }
 
@@ -40,7 +49,7 @@ function buildCharts(sample) {
       hovertext: otu_labels.slice(0, 10)
     };
      let layout_pie = {
-      title: "Pie Chart of ten most prevalent Belly Button OTUs"
+      title: "Top Ten Belly Button OTUs"
     };
       let data_pie = [trace1];
       Plotly.newPlot("pie", data_pie, layout_pie);
